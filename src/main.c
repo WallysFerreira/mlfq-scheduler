@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include "config_parser.h"
 
 int main(void) {
-    printf("Hi\n");
-    return 1;
+    char* data = "{}";
+    Config config = parse(data);
+    return 0;
 }
