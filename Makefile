@@ -28,4 +28,4 @@ ${BUILD_DIR}:
 tests: ${TEST_BINS}
 
 $(BUILD_DIR)/%: $(TEST_DIR)/%.c $(OBJ_FILES)
-	cc $< $(filter-out $(BUILD_DIR)/main.o, $(OBJ_FILES)) -o $@
+	cc $< $(filter-out $(BUILD_DIR)/main.o, $(OBJ_FILES)) -o $@ -lcunit
