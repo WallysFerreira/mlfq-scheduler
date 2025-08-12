@@ -2,6 +2,7 @@
 #define TYPES_H
 
 typedef struct {
+    int id
 } Config;
 
 #endif
