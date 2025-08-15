@@ -4,18 +4,24 @@
 #include "../src/types.h"
 #include "../src/config_parser.h"
 
+void assert_equals(int actual, int expected, const char *field_name) {
+    if (actual != expected) {
+        printf("Expected %s %d, got %d\n", field_name, expected, actual);
+        CU_FAIL();
+    }
+}
+
 void test_processes_info_parsing(void) {
     char* json_content = "{\"processes\":[{\"id\":1,\"arrival\":0,\"burst\":10}]}";
     Config config;
     int expected_id = 1;
+    int expected_arrival = 100;
 
     ParseResultCode result = parse(json_content, &config);
 
     CU_ASSERT_EQUAL(result, PARSE_OK);
-    if (config.id != expected_id) {
-        printf("Expected id %d, got %d\n", expected_id, config.id);
-        CU_FAIL();
-    }
+    assert_equals(config.id, expected_id, "id");
+    assert_equals(config.arrival, expected_arrival, "arrival");
 }
 
 void test_empty_processes(void) {

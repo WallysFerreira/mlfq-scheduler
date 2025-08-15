@@ -2,7 +2,8 @@
 #define TYPES_H
 
 typedef struct {
-    int id
+    int id;
+    int arrival;
 } Config;
 
 #endif
