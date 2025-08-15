@@ -54,6 +54,14 @@ void test_invalid_json(void) {
     CU_ASSERT_EQUAL(result, PARSE_INVALID_JSON_ERROR);
 }
 
+void test_id_is_not_number(void) {
+    char *json_content = "{\"processes\":[{\"id\":\"not a number\"}]}";
+    Config config;
+
+    ParseResultCode result = parse(json_content, &config);
+
+    CU_ASSERT_EQUAL(result, PARSE_ID_NOT_NUMBER_ERROR);
+}
 int suite_init(void) {
     return 0;
 }
@@ -81,7 +89,8 @@ int main(void) {
         (CU_add_test(suite, "should return error on empty processes list", test_empty_processes) == NULL) ||
         (CU_add_test(suite, "should return error when processes field is not found", test_no_processes_field) == NULL) ||
         (CU_add_test(suite, "should return error when processes field is not array", test_processes_not_array) == NULL) ||
-        (CU_add_test(suite, "should return error on invalid json", test_invalid_json) == NULL)) {
+        (CU_add_test(suite, "should return error on invalid json", test_invalid_json) == NULL) ||
+        (CU_add_test(suite, "should return error when id is not number", test_id_is_not_number) == NULL)) {
         return get_error();
     };
 

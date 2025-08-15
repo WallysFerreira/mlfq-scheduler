@@ -3,24 +3,19 @@
 #include "types.h"
 #include "config_parser.h"
 
-ParseResultCode generic_error(const char *error_message) {
-    fprintf(stderr, "%s\n", error_message);
-    return PARSE_ERROR;
-}
-
 ParseResultCode error(const char *error_message, ParseResultCode errorCode) {
     fprintf(stderr, "%s\n", error_message);
     return errorCode;
 }
 
-int parse_process_item(cJSON *processItemJson, Config *config) {
+ParseResultCode parse_process_item(cJSON *processItemJson, Config *config) {
     cJSON *processIdJson = cJSON_GetObjectItem(processItemJson, "id");
     if (cJSON_IsNumber(processIdJson)) {
         printf("Process id = %d\n", processIdJson->valueint);
         config->id = processIdJson->valueint;
         return PARSE_OK;
     } else {
-        return generic_error("Expected \"id\" field to be a number");
+        return error("Expected \"id\" field to be a number", PARSE_ID_NOT_NUMBER_ERROR);
     }
 }
 
@@ -37,12 +32,6 @@ ParseResultCode parse_processes_array(cJSON *jsonRoot, Config *config) {
 
         for (int i = 0; i < cJSON_GetArraySize(processesJson); i++) {
             cJSON *processItemJson = cJSON_GetArrayItem(processesJson, i);
-            if (processItemJson == NULL) {
-                char *error_msg;
-                sprintf(error_msg, "Item not found at index %d", i);
-                return generic_error(error_msg);
-            }
-
             return parse_process_item(processItemJson, config);
         }
     } else {
