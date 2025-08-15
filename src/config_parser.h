@@ -5,7 +5,8 @@
 
 typedef enum {
     PARSE_OK = 0,
-    PARSE_ERROR = 1
+    PARSE_ERROR = 1,
+    PARSE_EMPTY_PROCESSES_ERROR = 2
 } ParseErrorCode;
 
 ParseErrorCode parse(const char* data, Config *config);

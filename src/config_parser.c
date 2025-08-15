@@ -3,27 +3,32 @@
 #include "types.h"
 #include "config_parser.h"
 
-ParseErrorCode error(const char *error_message) {
+ParseErrorCode generic_error(const char *error_message) {
     fprintf(stderr, "%s\n", error_message);
     return PARSE_ERROR;
 }
 
-int parseProcessItem(cJSON *processItemJson, Config *config) {
+ParseErrorCode error(const char *error_message, ParseErrorCode errorCode) {
+    fprintf(stderr, "%s\n", error_message);
+    return errorCode;
+}
+
+int parse_process_item(cJSON *processItemJson, Config *config) {
     cJSON *processIdJson = cJSON_GetObjectItem(processItemJson, "id");
     if (cJSON_IsNumber(processIdJson)) {
         printf("Process id = %d\n", processIdJson->valueint);
         config->id = processIdJson->valueint;
         return PARSE_OK;
     } else {
-        return error("Expected \"id\" field to be a number");
+        return generic_error("Expected \"id\" field to be a number");
     }
 }
 
-ParseErrorCode parseProcessesArray(cJSON *jsonRoot, Config *config) {
+ParseErrorCode parse_processes_array(cJSON *jsonRoot, Config *config) {
     cJSON *processesJson = cJSON_GetObjectItem(jsonRoot, "processes");
     if (cJSON_IsArray(processesJson)) {
         if (cJSON_GetArraySize(processesJson) == 0) {
-            return error("\"processes\" should not be empty");
+            return error("\"processes\" should not be empty", PARSE_EMPTY_PROCESSES_ERROR);
         }
 
         for (int i = 0; i < cJSON_GetArraySize(processesJson); i++) {
@@ -31,23 +36,23 @@ ParseErrorCode parseProcessesArray(cJSON *jsonRoot, Config *config) {
             if (processItemJson == NULL) {
                 char *error_msg;
                 sprintf(error_msg, "Item not found at index %d", i);
-                return error(error_msg);
+                return generic_error(error_msg);
             }
 
-            return parseProcessItem(processItemJson, config);
+            return parse_process_item(processItemJson, config);
         }
     } else {
-        return error("Expected \"processes\" field to be an array");
+        return generic_error("Expected \"processes\" field to be an array");
     }
 }
 
 ParseErrorCode parse(const char* data, Config *config) {
     cJSON *jsonRoot = cJSON_Parse(data);
     if (jsonRoot == NULL) {
-        return error("Something went wrong when parsing json");
+        return generic_error("Something went wrong when parsing json");
     }
 
-    ParseErrorCode result = parseProcessesArray(jsonRoot, config);
+    ParseErrorCode result = parse_processes_array(jsonRoot, config);
 
     cJSON_Delete(jsonRoot);
     return result;

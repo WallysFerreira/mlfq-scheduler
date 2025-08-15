@@ -18,6 +18,15 @@ void test_processes_info_parsing(void) {
     }
 }
 
+void test_empty_processes(void) {
+    char* json_content = "{\"processes\":[]}";
+    Config config;
+
+    ParseErrorCode error = parse(json_content, &config);
+
+    CU_ASSERT_EQUAL(error, PARSE_EMPTY_PROCESSES_ERROR);
+}
+
 int suite_init(void) {
     return 0;
 }
@@ -41,7 +50,8 @@ int main(void) {
         return get_error();
     }
 
-    if ((CU_add_test(suite, "Should correctly parse process data", test_processes_info_parsing) == NULL)) {
+    if ((CU_add_test(suite, "Should correctly parse process data", test_processes_info_parsing) == NULL) ||
+        (CU_add_test(suite, "Should return error on empty processes list", test_empty_processes) == NULL)) {
         return get_error();
     };
 
