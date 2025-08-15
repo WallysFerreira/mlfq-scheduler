@@ -27,6 +27,15 @@ void test_empty_processes(void) {
     CU_ASSERT_EQUAL(error, PARSE_EMPTY_PROCESSES_ERROR);
 }
 
+void test_no_processes_field(void) {
+    char* json_content = "{\"other_field\": \"other_value\"}";
+    Config config;
+
+    ParseErrorCode error = parse(json_content, &config);
+
+    CU_ASSERT_EQUAL(error, PARSE_NO_PROCESSES_FIELD_ERROR);
+}
+
 int suite_init(void) {
     return 0;
 }
@@ -50,8 +59,9 @@ int main(void) {
         return get_error();
     }
 
-    if ((CU_add_test(suite, "Should correctly parse process data", test_processes_info_parsing) == NULL) ||
-        (CU_add_test(suite, "Should return error on empty processes list", test_empty_processes) == NULL)) {
+    if ((CU_add_test(suite, "should correctly parse process data", test_processes_info_parsing) == NULL) ||
+        (CU_add_test(suite, "should return error on empty processes list", test_empty_processes) == NULL) ||
+        (CU_add_test(suite, "should return error when processes field is not found", test_no_processes_field) == NULL)) {
         return get_error();
     };
 

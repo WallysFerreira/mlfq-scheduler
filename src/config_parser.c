@@ -26,6 +26,10 @@ int parse_process_item(cJSON *processItemJson, Config *config) {
 
 ParseErrorCode parse_processes_array(cJSON *jsonRoot, Config *config) {
     cJSON *processesJson = cJSON_GetObjectItem(jsonRoot, "processes");
+    if (processesJson == NULL) {
+        return error("\"processes\" field should exist", PARSE_NO_PROCESSES_FIELD_ERROR);
+    }
+
     if (cJSON_IsArray(processesJson)) {
         if (cJSON_GetArraySize(processesJson) == 0) {
             return error("\"processes\" should not be empty", PARSE_EMPTY_PROCESSES_ERROR);
