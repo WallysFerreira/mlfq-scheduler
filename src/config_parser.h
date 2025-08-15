@@ -7,7 +7,8 @@ typedef enum {
     PARSE_OK = 0,
     PARSE_ERROR = 1,
     PARSE_EMPTY_PROCESSES_ERROR = 2,
-    PARSE_NO_PROCESSES_FIELD_ERROR = 3
+    PARSE_NO_PROCESSES_FIELD_ERROR = 3,
+    PARSE_PROCESSES_NOT_ARRAY_ERROR = 4,
 } ParseResultCode;
 
 ParseResultCode parse(const char* data, Config *config);

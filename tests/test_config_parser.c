@@ -36,6 +36,15 @@ void test_no_processes_field(void) {
     CU_ASSERT_EQUAL(result, PARSE_NO_PROCESSES_FIELD_ERROR);
 }
 
+void test_processes_not_array(void) {
+    char *json_content = "{\"processes\": \"shouldBeArray\"}";
+    Config config;
+
+    ParseResultCode result = parse(json_content, &config);
+
+    CU_ASSERT_EQUAL(result, PARSE_PROCESSES_NOT_ARRAY_ERROR);
+}
+
 int suite_init(void) {
     return 0;
 }
@@ -61,7 +70,8 @@ int main(void) {
 
     if ((CU_add_test(suite, "should correctly parse process data", test_processes_info_parsing) == NULL) ||
         (CU_add_test(suite, "should return error on empty processes list", test_empty_processes) == NULL) ||
-        (CU_add_test(suite, "should return error when processes field is not found", test_no_processes_field) == NULL)) {
+        (CU_add_test(suite, "should return error when processes field is not found", test_no_processes_field) == NULL) ||
+        (CU_add_test(suite, "should return error when processes field is not array", test_processes_not_array) == NULL)) {
         return get_error();
     };
 

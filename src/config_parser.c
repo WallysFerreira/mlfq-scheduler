@@ -46,7 +46,7 @@ ParseResultCode parse_processes_array(cJSON *jsonRoot, Config *config) {
             return parse_process_item(processItemJson, config);
         }
     } else {
-        return generic_error("Expected \"processes\" field to be an array");
+        return error("Expected \"processes\" field to be an array", PARSE_PROCESSES_NOT_ARRAY_ERROR);
     }
 }
 
