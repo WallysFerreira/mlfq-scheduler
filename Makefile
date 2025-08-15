@@ -16,7 +16,7 @@ all: ${BUILD_DIR}/simulator
 
 # Link - Combine all into a file
 ${BUILD_DIR}/simulator: ${OBJ_FILES}
-	cc $^ -o $@
+	cc $^ -o $@ -lcjson
 
 # Compile - Make objects
 ${BUILD_DIR}/%.o: ${SRC_DIR}/%.c | ${BUILD_DIR}

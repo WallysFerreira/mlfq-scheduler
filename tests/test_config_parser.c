@@ -62,6 +62,7 @@ void test_id_is_not_number(void) {
 
     CU_ASSERT_EQUAL(result, PARSE_ID_NOT_NUMBER_ERROR);
 }
+
 int suite_init(void) {
     return 0;
 }
