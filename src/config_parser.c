@@ -3,12 +3,12 @@
 #include "types.h"
 #include "config_parser.h"
 
-ParseErrorCode generic_error(const char *error_message) {
+ParseResultCode generic_error(const char *error_message) {
     fprintf(stderr, "%s\n", error_message);
     return PARSE_ERROR;
 }
 
-ParseErrorCode error(const char *error_message, ParseErrorCode errorCode) {
+ParseResultCode error(const char *error_message, ParseResultCode errorCode) {
     fprintf(stderr, "%s\n", error_message);
     return errorCode;
 }
@@ -24,7 +24,7 @@ int parse_process_item(cJSON *processItemJson, Config *config) {
     }
 }
 
-ParseErrorCode parse_processes_array(cJSON *jsonRoot, Config *config) {
+ParseResultCode parse_processes_array(cJSON *jsonRoot, Config *config) {
     cJSON *processesJson = cJSON_GetObjectItem(jsonRoot, "processes");
     if (processesJson == NULL) {
         return error("\"processes\" field should exist", PARSE_NO_PROCESSES_FIELD_ERROR);
@@ -50,13 +50,13 @@ ParseErrorCode parse_processes_array(cJSON *jsonRoot, Config *config) {
     }
 }
 
-ParseErrorCode parse(const char* data, Config *config) {
+ParseResultCode parse(const char* data, Config *config) {
     cJSON *jsonRoot = cJSON_Parse(data);
     if (jsonRoot == NULL) {
         return generic_error("Something went wrong when parsing json");
     }
 
-    ParseErrorCode result = parse_processes_array(jsonRoot, config);
+    ParseResultCode result = parse_processes_array(jsonRoot, config);
 
     cJSON_Delete(jsonRoot);
     return result;

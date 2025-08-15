@@ -8,8 +8,8 @@ typedef enum {
     PARSE_ERROR = 1,
     PARSE_EMPTY_PROCESSES_ERROR = 2,
     PARSE_NO_PROCESSES_FIELD_ERROR = 3
-} ParseErrorCode;
+} ParseResultCode;
 
-ParseErrorCode parse(const char* data, Config *config);
+ParseResultCode parse(const char* data, Config *config);
 
 #endif

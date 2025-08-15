@@ -9,9 +9,9 @@ void test_processes_info_parsing(void) {
     Config config;
     int expected_id = 1;
 
-    ParseErrorCode error = parse(json_content, &config);
+    ParseResultCode result = parse(json_content, &config);
 
-    CU_ASSERT_EQUAL(error, PARSE_OK);
+    CU_ASSERT_EQUAL(result, PARSE_OK);
     if (config.id != expected_id) {
         printf("Expected id %d, got %d\n", expected_id, config.id);
         CU_FAIL();
@@ -22,18 +22,18 @@ void test_empty_processes(void) {
     char* json_content = "{\"processes\":[]}";
     Config config;
 
-    ParseErrorCode error = parse(json_content, &config);
+    ParseResultCode result = parse(json_content, &config);
 
-    CU_ASSERT_EQUAL(error, PARSE_EMPTY_PROCESSES_ERROR);
+    CU_ASSERT_EQUAL(result, PARSE_EMPTY_PROCESSES_ERROR);
 }
 
 void test_no_processes_field(void) {
     char* json_content = "{\"other_field\": \"other_value\"}";
     Config config;
 
-    ParseErrorCode error = parse(json_content, &config);
+    ParseResultCode result = parse(json_content, &config);
 
-    CU_ASSERT_EQUAL(error, PARSE_NO_PROCESSES_FIELD_ERROR);
+    CU_ASSERT_EQUAL(result, PARSE_NO_PROCESSES_FIELD_ERROR);
 }
 
 int suite_init(void) {
