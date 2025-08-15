@@ -45,6 +45,15 @@ void test_processes_not_array(void) {
     CU_ASSERT_EQUAL(result, PARSE_PROCESSES_NOT_ARRAY_ERROR);
 }
 
+void test_invalid_json(void) {
+    char *not_json_content = "this is not a valid json";
+    Config config;
+
+    ParseResultCode result = parse(not_json_content, &config);
+
+    CU_ASSERT_EQUAL(result, PARSE_INVALID_JSON_ERROR);
+}
+
 int suite_init(void) {
     return 0;
 }
@@ -71,7 +80,8 @@ int main(void) {
     if ((CU_add_test(suite, "should correctly parse process data", test_processes_info_parsing) == NULL) ||
         (CU_add_test(suite, "should return error on empty processes list", test_empty_processes) == NULL) ||
         (CU_add_test(suite, "should return error when processes field is not found", test_no_processes_field) == NULL) ||
-        (CU_add_test(suite, "should return error when processes field is not array", test_processes_not_array) == NULL)) {
+        (CU_add_test(suite, "should return error when processes field is not array", test_processes_not_array) == NULL) ||
+        (CU_add_test(suite, "should return error on invalid json", test_invalid_json) == NULL)) {
         return get_error();
     };
 

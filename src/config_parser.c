@@ -53,7 +53,7 @@ ParseResultCode parse_processes_array(cJSON *jsonRoot, Config *config) {
 ParseResultCode parse(const char* data, Config *config) {
     cJSON *jsonRoot = cJSON_Parse(data);
     if (jsonRoot == NULL) {
-        return generic_error("Something went wrong when parsing json");
+        return error("Something went wrong when parsing json", PARSE_INVALID_JSON_ERROR);
     }
 
     ParseResultCode result = parse_processes_array(jsonRoot, config);

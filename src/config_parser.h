@@ -9,6 +9,7 @@ typedef enum {
     PARSE_EMPTY_PROCESSES_ERROR = 2,
     PARSE_NO_PROCESSES_FIELD_ERROR = 3,
     PARSE_PROCESSES_NOT_ARRAY_ERROR = 4,
+    PARSE_INVALID_JSON_ERROR = 5,
 } ParseResultCode;
 
 ParseResultCode parse(const char* data, Config *config);
