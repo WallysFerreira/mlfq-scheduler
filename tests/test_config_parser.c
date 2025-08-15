@@ -6,12 +6,14 @@
 
 void test_processes_info_parsing(void) {
     char* json_content = "{\"processes\":[{\"id\":1,\"arrival\":0,\"burst\":10}]}";
+    Config config;
     int expected_id = 1;
 
-    Config actual_config = parse(json_content);
+    ParseErrorCode error = parse(json_content, &config);
 
-    if (actual_config.id != expected_id) {
-        printf("Expected id %d, got %d\n", expected_id, actual_config.id);
+    CU_ASSERT_EQUAL(error, PARSE_OK);
+    if (config.id != expected_id) {
+        printf("Expected id %d, got %d\n", expected_id, config.id);
         CU_FAIL();
     }
 }
