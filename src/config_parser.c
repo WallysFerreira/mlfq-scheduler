@@ -8,7 +8,7 @@ ParseResultCode error(const char *error_message, ParseResultCode errorCode) {
     return errorCode;
 }
 
-ParseResultCode parse_process_item(cJSON *processItemJson, Config *config) {
+ParseResultCode parse_process_id(cJSON *processItemJson, Config *config) {
     cJSON *processIdJson = cJSON_GetObjectItem(processItemJson, "id");
     if (cJSON_IsNumber(processIdJson)) {
         printf("Process id = %d\n", processIdJson->valueint);
@@ -16,6 +16,29 @@ ParseResultCode parse_process_item(cJSON *processItemJson, Config *config) {
         return PARSE_OK;
     } else {
         return error("Expected \"id\" field to be a number", PARSE_ID_NOT_NUMBER_ERROR);
+    }
+}
+
+ParseResultCode parse_process_arrival(cJSON *processItemJson, Config *config) {
+    cJSON *arrivalJson = cJSON_GetObjectItem(processItemJson, "arrival");
+    if (cJSON_IsNumber(arrivalJson)) {
+        printf("Process arrival = %d\n", arrivalJson->valueint);
+        config->arrival = arrivalJson->valueint;
+        return PARSE_OK;
+    } else {
+        return error("Expected \"arrival\" field to be a number", PARSE_ERROR);
+    }
+}
+
+ParseResultCode parse_process_item(cJSON *processItemJson, Config *config) {
+    ParseResultCode idParsingResult = parse_process_id(processItemJson, config);
+    if (idParsingResult != PARSE_OK) {
+        return idParsingResult;
+    }
+
+    ParseResultCode arrivalParsingResult = parse_process_arrival(processItemJson, config);
+    if (arrivalParsingResult != PARSE_OK) {
+        return arrivalParsingResult;
     }
 }
 

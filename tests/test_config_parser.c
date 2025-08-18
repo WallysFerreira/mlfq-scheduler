@@ -6,13 +6,13 @@
 
 void assert_equals(int actual, int expected, const char *field_name) {
     if (actual != expected) {
-        printf("Expected %s %d, got %d\n", field_name, expected, actual);
+        printf("FAIL: Expected %s %d, got %d\n", field_name, expected, actual);
         CU_FAIL();
     }
 }
 
 void test_processes_info_parsing(void) {
-    char* json_content = "{\"processes\":[{\"id\":1,\"arrival\":0,\"burst\":10}]}";
+    char* json_content = "{\"processes\":[{\"id\":1,\"arrival\":100,\"burst\":10}]}";
     Config config;
     int expected_id = 1;
     int expected_arrival = 100;
