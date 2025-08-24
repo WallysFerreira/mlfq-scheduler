@@ -36,9 +36,21 @@ ParseResultCode parse_process_arrival(cJSON *process_item_json, Config *config) 
     }
 }
 
+ParseResultCode parse_process_burst(cJSON *process_item_json, Config *config) {
+    cJSON *burst_json = cJSON_GetObjectItem(process_item_json, "burst");
+    if (cJSON_IsNumber(burst_json)) {
+        printf("Process burst = %d\n", burst_json->valueint);
+        config->burst = burst_json->valueint;
+        return PARSE_OK;
+    } else {
+        return error("Expected \"burst\" field to be a number", PARSE_ERROR);
+    }
+}
+
 ParseResultCode parse_process_item(cJSON *processItemJson, Config *config) {
     RETURN_IF_ERROR(parse_process_id(processItemJson, config));
     RETURN_IF_ERROR(parse_process_arrival(processItemJson, config));
+    RETURN_IF_ERROR(parse_process_burst(processItemJson, config));
 }
 
 ParseResultCode parse_processes_array(cJSON *json_root, Config *config) {

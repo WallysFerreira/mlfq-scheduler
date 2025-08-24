@@ -16,12 +16,14 @@ void test_processes_info_parsing(void) {
     Config config;
     int expected_id = 1;
     int expected_arrival = 100;
+    int expected_burst = 10;
 
     ParseResultCode result = parse(json_content, &config);
 
     CU_ASSERT_EQUAL(result, PARSE_OK);
     assert_equals(config.id, expected_id, "id");
     assert_equals(config.arrival, expected_arrival, "arrival");
+    assert_equals(config.burst, expected_burst, "burst");
 }
 
 void test_empty_processes(void) {
