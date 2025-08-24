@@ -3,6 +3,12 @@
 #include "types.h"
 #include "config_parser.h"
 
+#define RETURN_IF_ERROR(expr)           \
+    do {                                \
+        ParseResultCode rc = (expr);    \
+        if (rc != PARSE_OK) return rc;  \
+    } while (0);
+
 ParseResultCode error(const char *error_message, ParseResultCode error_code) {
     fprintf(stderr, "%s\n", error_message);
     return error_code;
@@ -31,15 +37,8 @@ ParseResultCode parse_process_arrival(cJSON *process_item_json, Config *config) 
 }
 
 ParseResultCode parse_process_item(cJSON *processItemJson, Config *config) {
-    ParseResultCode idParsingResult = parse_process_id(processItemJson, config);
-    if (idParsingResult != PARSE_OK) {
-        return idParsingResult;
-    }
-
-    ParseResultCode arrivalParsingResult = parse_process_arrival(processItemJson, config);
-    if (arrivalParsingResult != PARSE_OK) {
-        return arrivalParsingResult;
-    }
+    RETURN_IF_ERROR(parse_process_id(processItemJson, config));
+    RETURN_IF_ERROR(parse_process_arrival(processItemJson, config));
 }
 
 ParseResultCode parse_processes_array(cJSON *json_root, Config *config) {
