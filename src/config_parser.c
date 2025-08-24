@@ -14,37 +14,50 @@ ParseResultCode error(const char *error_message, ParseResultCode error_code) {
     return error_code;
 }
 
-ParseResultCode parse_process_id(cJSON *process_item_json, Config *config) {
-    cJSON *process_id_json = cJSON_GetObjectItem(process_item_json, "id");
-    if (cJSON_IsNumber(process_id_json)) {
-        printf("Process id = %d\n", process_id_json->valueint);
-        config->id = process_id_json->valueint;
+ParseResultCode expected_number_error(const char *field_name) {
+    char msg[50];
+    sprintf(msg, "Expected \"%s\" field to be a number", field_name);
+    return error(msg, PARSE_ID_NOT_NUMBER_ERROR);
+}
+
+ParseResultCode get_number_field(cJSON *parent_json, const char *field_name, int *result) {
+    cJSON *field_json = cJSON_GetObjectItem(parent_json, field_name);
+    if (cJSON_IsNumber(field_json)) {
+        *result = field_json->valueint;
         return PARSE_OK;
     } else {
-        return error("Expected \"id\" field to be a number", PARSE_ID_NOT_NUMBER_ERROR);
+        return expected_number_error(field_name);
     }
+}
+
+ParseResultCode parse_process_id(cJSON *process_item_json, Config *config) {
+    int process_id;
+    RETURN_IF_ERROR(get_number_field(process_item_json, "id", &process_id));
+
+    printf("Process id = %d\n", process_id);
+    config->id = process_id;
+
+    return PARSE_OK;
 }
 
 ParseResultCode parse_process_arrival(cJSON *process_item_json, Config *config) {
-    cJSON *arrival_json = cJSON_GetObjectItem(process_item_json, "arrival");
-    if (cJSON_IsNumber(arrival_json)) {
-        printf("Process arrival = %d\n", arrival_json->valueint);
-        config->arrival = arrival_json->valueint;
-        return PARSE_OK;
-    } else {
-        return error("Expected \"arrival\" field to be a number", PARSE_ERROR);
-    }
+    int process_arrival;
+    RETURN_IF_ERROR(get_number_field(process_item_json, "arrival", &process_arrival))
+
+    printf("Process arrival = %d\n", process_arrival);
+    config->arrival = process_arrival;
+
+    return PARSE_OK;
 }
 
 ParseResultCode parse_process_burst(cJSON *process_item_json, Config *config) {
-    cJSON *burst_json = cJSON_GetObjectItem(process_item_json, "burst");
-    if (cJSON_IsNumber(burst_json)) {
-        printf("Process burst = %d\n", burst_json->valueint);
-        config->burst = burst_json->valueint;
-        return PARSE_OK;
-    } else {
-        return error("Expected \"burst\" field to be a number", PARSE_ERROR);
-    }
+    int process_burst;
+    RETURN_IF_ERROR(get_number_field(process_item_json, "burst", &process_burst));
+
+    printf("Process burst = %d\n", process_burst);
+    config->burst = process_burst;
+
+    return PARSE_OK;
 }
 
 ParseResultCode parse_process_item(cJSON *processItemJson, Config *config) {
