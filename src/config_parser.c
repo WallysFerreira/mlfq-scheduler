@@ -17,7 +17,7 @@ ParseResultCode error(const char *error_message, ParseResultCode error_code) {
 ParseResultCode expected_number_error(const char *field_name) {
     char msg[50];
     sprintf(msg, "Expected \"%s\" field to be a number", field_name);
-    return error(msg, PARSE_ID_NOT_NUMBER_ERROR);
+    return error(msg, PARSE_FIELD_NOT_NUMBER_ERROR);
 }
 
 ParseResultCode get_number_field(cJSON *parent_json, const char *field_name, int *result) {

@@ -68,7 +68,7 @@ void test_id_is_not_number(void) {
 
     ParseResultCode result = parse(json_content, &config);
 
-    CU_ASSERT_EQUAL(result, PARSE_ID_NOT_NUMBER_ERROR);
+    CU_ASSERT_EQUAL(result, PARSE_FIELD_NOT_NUMBER_ERROR);
 }
 
 int suite_init(void) {
