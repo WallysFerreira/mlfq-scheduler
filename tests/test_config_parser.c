@@ -62,13 +62,16 @@ void test_invalid_json(void) {
     CU_ASSERT_EQUAL(result, PARSE_INVALID_JSON_ERROR);
 }
 
-void test_id_is_not_number(void) {
-    char *json_content = "{\"processes\":[{\"id\":\"not a number\"}]}";
+void test_invalid_id_field(void) {
+    char *json_id_not_number = "{\"processes\":[{\"id\":\"not a number\"}]}";
+    char *json_id_inexistent = "{\"processes\":[{\"something\": 2}]}";
     Config config;
 
-    ParseResultCode result = parse(json_content, &config);
+    ParseResultCode not_number_result = parse(json_id_not_number, &config);
+    ParseResultCode inexistent_result = parse(json_id_inexistent, &config);
 
-    CU_ASSERT_EQUAL(result, PARSE_FIELD_NOT_NUMBER_ERROR);
+    CU_ASSERT_EQUAL(not_number_result, PARSE_INVALID_FIELD);
+    CU_ASSERT_EQUAL(inexistent_result, PARSE_INVALID_FIELD);
 }
 
 int suite_init(void) {
@@ -99,7 +102,7 @@ int main(void) {
         (CU_add_test(suite, "should return error when processes field is not found", test_no_processes_field) == NULL) ||
         (CU_add_test(suite, "should return error when processes field is not array", test_processes_not_array) == NULL) ||
         (CU_add_test(suite, "should return error on invalid json", test_invalid_json) == NULL) ||
-        (CU_add_test(suite, "should return error when id is not number", test_id_is_not_number) == NULL)) {
+        (CU_add_test(suite, "should return error when id is invalid", test_invalid_id_field) == NULL)) {
         return get_error();
     };
 
